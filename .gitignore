@@ -5,14 +5,10 @@
 *.ntvs*
 *.njsproj
 *.
-* text=auto
-*.css linguist-vendored
-*.scss linguist-vendored
-*.js linguist-vendored
-CHANGELOG.md export-ignore
 
 
-composer.json.lock
+composer.lock
+yarn.lock
 vendor/
 node_modules/
 npm-debug.log
