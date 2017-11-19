@@ -69,4 +69,21 @@ class LoginController extends Controller
     {
         return Auth::guard('admin');
     }
+
+    /**
+     * 重写登录字段验证
+     *
+     * @param Request $request
+     */
+    protected function validateLogin(Request $request)
+    {
+        $this->validate($request, [
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'captcha' => 'required|captcha'
+        ], [
+            'captcha.required' => trans('validation.required'),
+            'captcha.captcha' => trans('validation.captcha'),
+        ]);
+    }
 }
