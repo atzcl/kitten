@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     /**
-     * 这里定义的中间件是在程序全局的每次请求执行都会使用的(默认执行中间件)
      * The application's global HTTP middleware stack.
      *
      * These middleware are run during every request to your application.
@@ -23,8 +22,6 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * 应用程序的中间件组
-     * 这些中间件可能被分配到组或单独使用
      * The application's route middleware groups.
      *
      * @var array
@@ -47,18 +44,18 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * 路由中间件
+     * The application's route middleware.
+     *
+     * These middleware may be assigned to groups or used individually.
      *
      * @var array
      */
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.admin' => \App\Http\Middleware\AdminAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'auth.jwt' => \App\Http\Middleware\AuthJWT::class,
     ];
 }

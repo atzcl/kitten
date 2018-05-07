@@ -48,7 +48,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Public Key 公钥文件路径
+        | Public Key
         |--------------------------------------------------------------------------
         |
         | A path or resource to your public key.
@@ -61,7 +61,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Private Key 私钥文件路径
+        | Private Key
         |--------------------------------------------------------------------------
         |
         | A path or resource to your private key.
@@ -74,7 +74,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Passphrase 密码
+        | Passphrase
         |--------------------------------------------------------------------------
         |
         | The passphrase for your private key. Can be null if none set.
@@ -87,7 +87,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JWT time to live 过期时间，以分为单位
+    | JWT time to live
     |--------------------------------------------------------------------------
     |
     | Specify the length of time (in minutes) that the token will be valid for.
@@ -100,11 +100,11 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 40320),
+    'ttl' => env('JWT_TTL', 20160),
 
     /*
     |--------------------------------------------------------------------------
-    | Refresh time to live 失效时间，以分钟为单位
+    | Refresh time to live
     |--------------------------------------------------------------------------
     |
     | Specify the length of time (in minutes) that the token can be refreshed
@@ -123,7 +123,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | JWT hashing algorithm 哈希算法
+    | JWT hashing algorithm
     |--------------------------------------------------------------------------
     |
     | Specify the hashing algorithm that will be used to sign the token.
@@ -137,7 +137,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Required Claims 必须要填写的值，不然会抛出异常
+    | Required Claims
     |--------------------------------------------------------------------------
     |
     | Specify the required claims that must exist in any token.
@@ -147,12 +147,12 @@ return [
     */
 
     'required_claims' => [
-        'iss', // JWT 签发者
-        'iat', // 下发生成的 token 时的unix时间戳 // 签发时间-UNIX时间戳
-        'exp', // 指定 token 的有效时间。// 过期时间-UNIX时间戳，必须大于签发时间
-        'nbf', // 可以使用 token 的最早时间点（unix时间戳）(即，定义从什么时候开始可以使用这个token) // 指定一个UNIX时间戳之前，此TOKEN是不可用的
-        'sub', // 保存在 token 的数据
-        'jti', // JWT ID为web token提供唯一标识
+        'iss',
+        'iat',
+        'exp',
+        'nbf',
+        'sub',
+        'jti',
     ],
 
     /*
@@ -175,7 +175,43 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Blacklist Enabled 黑名单
+    | Lock Subject
+    |--------------------------------------------------------------------------
+    |
+    | This will determine whether a `prv` claim is automatically added to
+    | the token. The purpose of this is to ensure that if you have multiple
+    | authentication models e.g. `App\User` & `App\OtherPerson`, then we
+    | should prevent one authentication request from impersonating another,
+    | if 2 tokens happen to have the same id across the 2 different models.
+    |
+    | Under specific circumstances, you may want to disable this behaviour
+    | e.g. if you only have one authentication model, then you would save
+    | a little on token size.
+    |
+    */
+
+    'lock_subject' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Leeway
+    |--------------------------------------------------------------------------
+    |
+    | This property gives the jwt timestamp claims some "leeway".
+    | Meaning that if you have any unavoidable slight clock skew on
+    | any of your servers then this will afford you some level of cushioning.
+    |
+    | This applies to the claims `iat`, `nbf` and `exp`.
+    |
+    | Specify in seconds - only if you know you need it.
+    |
+    */
+
+    'leeway' => env('JWT_LEEWAY', 0),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blacklist Enabled
     |--------------------------------------------------------------------------
     |
     | In order to invalidate tokens, you must have the blacklist enabled.
@@ -187,7 +223,7 @@ return [
 
     /*
     | -------------------------------------------------------------------------
-    | Blacklist Grace Period 宽限时间，用于高并发，以秒为单位
+    | Blacklist Grace Period
     | -------------------------------------------------------------------------
     |
     | When multiple concurrent requests are made with the same JWT,
@@ -198,11 +234,29 @@ return [
     |
     */
 
-    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 30),
+    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 0),
 
     /*
     |--------------------------------------------------------------------------
-    | Providers 服务提供
+    | Cookies encryption
+    |--------------------------------------------------------------------------
+    |
+    | By default Laravel encrypt cookies for security reason.
+    | If you decide to not decrypt cookies, you will have to configure Laravel
+    | to not encrypt your cookie token by adding its name into the $except
+    | array available in the middleware "EncryptCookies" provided by Laravel.
+    | see https://laravel.com/docs/master/responses#cookies-and-encryption
+    | for details.
+    |
+    | Set it to true if you want to decrypt cookies.
+    |
+    */
+
+    'decrypt_cookies' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Providers
     |--------------------------------------------------------------------------
     |
     | Specify the various providers used throughout the package.
@@ -220,7 +274,7 @@ return [
         |
         */
 
-        'jwt' => Tymon\JWTAuth\Providers\JWT\Namshi::class,
+        'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------

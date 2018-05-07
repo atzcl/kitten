@@ -1,12 +1,18 @@
 <?php
+
+use Illuminate\Http\Request;
+
 /*
-+-----------------------------------------------------------------------------------------------------------------------
-| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.zcloop.com
-+-----------------------------------------------------------------------------------------------------------------------
-| API 路由规则
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::group(['prefix' => 'v1', 'namespace' => 'V1'], function () {
-    Route::get('/index', 'IndexController@index')->name('api.index');
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
 });

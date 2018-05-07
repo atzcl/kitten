@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types = 1);
+
+/*
++-----------------------------------------------------------------------------------------------------------------------
+| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.atzcl.cn
++-----------------------------------------------------------------------------------------------------------------------
+| repository 层
+|
+*/
+
+namespace $NAMESPACE$;
+
+use Prettus\Repository\Eloquent\BaseRepository;
+use App\Traits\Repositories\SuppQueryBuilderTrait;
+use Prettus\Repository\Traits\CacheableRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
+
+class $CLASS$ extends BaseRepository implements CacheableInterface
+{
+    // 实现缓存，可缓存的方法是：all，paginate，find，findByField，findWhere，getByCriteria
+    use CacheableRepository, SuppQueryBuilderTrait;
+
+    /**
+     * @return string 对应的模型类
+     */
+    public function model()
+    {
+        //
+    }
+}

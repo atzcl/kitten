@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types = 1);
+
+/*
++-----------------------------------------------------------------------------------------------------------------------
+| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.atzcl.cn
++-----------------------------------------------------------------------------------------------------------------------
+| $CLASS$ Controller
+|
+*/
+
+namespace $CLASS_NAMESPACE$;
+
+use Illuminate\Routing\Controller;
+
+class $CLASS$ extends Controller
+{
+    // 列表信息
+    public function index()
+    {
+        return response()->json([
+            'code' => 200,
+            'data' => '$STUDLY_NAME$ 模块',
+            'msg' => 'success',
+            'time' => time()
+        ])->setEncodingOptions(JSON_UNESCAPED_UNICODE)
+            ->header('content-type', 'application/json; charset=UTF-8');
+    }
+
+    // 显示指定数据
+    public function show(int $id)
+    {
+        //
+    }
+
+    // 创建保存
+    public function store()
+    {
+        //
+    }
+
+    // 更新数据
+    public function update(int $id)
+    {
+        //
+    }
+
+    // 删除数据
+    public function destroy(int $id)
+    {
+        //
+    }
+}

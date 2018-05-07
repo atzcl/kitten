@@ -91,7 +91,7 @@ return [
     |
     */
 
-    'fallback_locale' => env('APP_LOCALE', 'en'),
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -121,8 +121,8 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'daily'),
-
+    'log' => env('APP_LOG', 'single'),
+    'log_max_files' => env('LOG_MAX_FILESf', 30), // 当 log 类型选择为 daily 后， 增加该配置来指定日志保留日期数量，默认 30 天
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
     /*
@@ -160,7 +160,6 @@ return [
         Illuminate\Redis\RedisServiceProvider::class,
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
-        // Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
@@ -177,10 +176,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        // JWT
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
     ],
 
@@ -230,11 +225,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        // JWT
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-        // EasyWeChat
-        'EasyWeChat' => Overtrue\LaravelWeChat\Facade::class,
+
     ],
 
 ];

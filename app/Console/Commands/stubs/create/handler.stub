@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types = 1);
+
+/*
++-----------------------------------------------------------------------------------------------------------------------
+| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.atzcl.cn
++-----------------------------------------------------------------------------------------------------------------------
+| $CLASS$ 业务处理器
+|
+*/
+
+namespace $NAMESPACE$;
+
+use App\Foundation\Abstracts\HandlerAbstract;
+
+class $CLASS$ extends HandlerAbstract
+{
+    /**
+     * $CLASS$ constructor [ 如果用不到构造函数，请删除它 ]
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    // 处理业务
+    public function execute()
+    {
+        //
+    }
+
+    /**
+     * 前置需要调用方法集合 [ 后面可以将其拓展为观察者模式 ]
+     *
+     * @return array
+     */
+    public function beforeExecutes(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    /**
+     * 后置需要调用方法集合 [ 后面可以将其拓展为观察者模式 ]
+     *
+     * @return array
+     */
+    public function afterExecutes(): array
+    {
+        return [
+            //
+        ];
+    }
+}

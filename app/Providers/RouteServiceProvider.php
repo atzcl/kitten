@@ -23,8 +23,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // 全局参数约束
-        Route::pattern('id', '[0-9]+');
+        //
+
         parent::boot();
     }
 
@@ -35,17 +35,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        // Api 路由
         $this->mapApiRoutes();
 
-        // Web 端路由
         $this->mapWebRoutes();
 
-        // 后端 Api 路由
-        $this->mapSystemRoutes();
-
-        // 微信路由
-        $this->mapWeChatRoutes();
+        //
     }
 
     /**
@@ -73,32 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api')
              ->middleware('api')
-             ->namespace($this->namespace . '\Api')
+             ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
-    }
-
-    /**
-     * 后端 api 路由
-     *
-     * @return void
-     */
-    protected function mapSystemRoutes()
-    {
-        Route::prefix('system')
-            ->middleware(['web', 'auth.admin:admin'])
-            ->namespace($this->namespace . '\Admin')
-            ->group(base_path('routes/system.php'));
-    }
-
-    /**
-     * 微信端 路由
-     *
-     * @return void
-     */
-    protected function mapWeChatRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->namespace . '\WeChat')
-            ->group(base_path('routes/wechat.php'));
     }
 }

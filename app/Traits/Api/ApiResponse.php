@@ -1,12 +1,19 @@
 <?php
+
+declare( strict_types = 1);
+
 /*
 +-----------------------------------------------------------------------------------------------------------------------
-| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.zcloop.com
+| Author: 植成樑 <atzcl0310@gmail.com>  Blog：https://www.atzcl.cn
 +-----------------------------------------------------------------------------------------------------------------------
 | Api 返回
 |
 */
+
 namespace App\Traits\Api;
+
+// Response represents an HTTP response
+use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
 trait ApiResponse
 {
@@ -23,17 +30,27 @@ trait ApiResponse
     /**
      * @var int 返回的 code 状态码
      * */
-    private $code = 200;
+    private $statusCode = 200;
+
+    /**
+     * @var mixed 返回的 data 数据
+     * */
+    private $statusData = null;
 
     /**
      * @var string 返回的 msg 提示
      */
-    private $statusMsg = 'success';
+    private $statusMessage = 'success';
+
+    /**
+     * @var int|null 返回的分页查询的总页数
+     */
+    private $statusTotal = null;
 
     /**
      * @var array 返回的 msg 快捷数组
      * */
-    public static $statusMsgTexts = [
+    public static $statusMessageTexts = [
         '缺少关键参数',
         '暂无数据',
         'create success',
@@ -52,9 +69,9 @@ trait ApiResponse
      * @param int $type
      * @return string
      */
-    public function getMessage($type = 0) : string
+    public function getStatusMessage($type = 0): string
     {
-        return static::$statusMsgTexts[$type] ?? 'error';
+        return $this->statusMessage ?? static::$statusMessageTexts[$type];
     }
 
     /**
@@ -63,9 +80,10 @@ trait ApiResponse
      * @param int $code
      * @return $this
      */
-    public function setCode(int $code) : self
+    public function setStatusCode(int $code): self
     {
-        $this->code = $code;
+        $this->statusCode = $code;
+
         return $this;
     }
 
@@ -75,9 +93,10 @@ trait ApiResponse
      * @param int $code
      * @return $this
      */
-    public function setHttpCode(int $code) : self
+    public function setHttpCode(int $code): self
     {
         $this->httpCode = $code;
+
         return $this;
     }
 
@@ -87,9 +106,10 @@ trait ApiResponse
      * @param array $header
      * @return $this
      */
-    public function setHttpHeaders(array $header = []) : self
+    public function setHttpHeaders(array $header = []): self
     {
         $this->httpCode = $header;
+
         return $this;
     }
 
@@ -99,12 +119,39 @@ trait ApiResponse
      * @param string|int $msg
      * @return $this
      */
-    protected function setMessage($msg = null) : self
+    public function setStatusMessage($msg = null): self
     {
         if (!is_null($msg) && is_int($msg)) {
-            $msg = static::$statusMsgTexts[$msg] ?? 'error';
+            $msg = static::$statusMessageTexts[$msg] ?? 'error';
         }
-        $this->statusMsg = $msg;
+
+        $this->statusMessage = $msg;
+
+        return $this;
+    }
+
+    /**
+     * 设置返回的 data 数据
+     *
+     * @param mixed $data
+     * @return $this
+     */
+    public function setStatusData($data = null): self
+    {
+        $this->statusData = $data;
+
+        return $this;
+    }
+
+    /**
+     * 设置分页查询的总页数
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setStatusTotal(int $value): self
+    {
+        $this->statusTotal = $value;
 
         return $this;
     }
@@ -112,61 +159,67 @@ trait ApiResponse
     /**
      * 返回 json
      *
-     * @param string|array|object|int
-     * @param int|null $count
      * @param array  $headers
      * @return \Illuminate\Http\JsonResponse
      */
-    public function respond(&$data, int $count = null, array $headers = [])
+    public function respond(array $headers = [])
     {
         $response = [
-            'code'  => $this->code,
-            'data'  => $data,
-            'msg'   => $this->statusMsg,
+            'code'  => $this->statusCode,
+            'data'  => $this->statusData,
+            'msg'   => $this->statusMessage,
             'time'  => time()
         ];
-        if (!is_null($count)) {
-            $response['count'] = $count;
+
+        if (!is_null($this->statusTotal)) {
+            $response['total'] = $this->statusTotal;
         }
 
-        return response()->json($response, $this->httpCode, $headers);
+        return response()->json($response, $this->httpCode, $headers)
+            ->setEncodingOptions(JSON_UNESCAPED_UNICODE)
+            ->header('content-type', 'application/json; charset=UTF-8');
     }
 
     /**
      * 失败
      *
      * @param string $msg
-     * @param string|array|object|int $data
      * @return mixed
      */
-    public function failed($msg = 'error', $data = null)
+    public function failed(string $msg = '')
     {
-        return $this->setMessage($msg)->respond($data);
+        if (!empty($msg)) {
+            $this->setStatusMessage($msg);
+        }
+
+        return $this->setStatusMessage($msg)->respond();
     }
 
     /**
      * 成功
      *
-     * @param string|array|object|int $data
      * @param string $msg
      * @return mixed
      */
-    public function succeed($data = null, $msg = 'success')
+    public function succeed(string $msg = '')
     {
-        return $this->setMessage($msg)->respond($data);
+        if (!empty($msg)) {
+            $this->setStatusMessage($msg);
+        }
+
+        return $this->respond();
     }
 
     /**
      * 成功并带有总数数据
      *
-     * @param string|array|object|int $data
      * @param string $msg
      * @param int|array $count
      * @return mixed
      */
-    public function succeedPage($data, $count, $msg = 'success')
+    public function succeedPage($count, $msg = 'success')
     {
-        return $this->setMessage($msg)->respond($data, $count);
+        return $this->setStatusMessage($msg)->respond($count);
     }
 
     /**
@@ -177,6 +230,6 @@ trait ApiResponse
      */
     public function notFond($msg = 'Not Fond')
     {
-        return $this->setCode(404)->failed($msg);
+        return $this->setStatusCode(404)->failed($msg);
     }
 }

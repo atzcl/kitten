@@ -1,0 +1,17 @@
+<?php
+/*
++-----------------------------------------------------------------------------------------------------------------------
+| $STUDLY_NAME$ 模块路由规则
++-----------------------------------------------------------------------------------------------------------------------
+| 划分版本： v1、v2...
+|
+*/
+
+Route::prefix('v1')
+    // ->middleware('auth.jwt')
+    // ->namespace('$MODULE_NAMESPACE$\$STUDLY_NAME$\Http\Controllers\V1')
+    ->namespace('$MODULE_NAMESPACE$\$STUDLY_NAME$\Http\Controllers')
+    ->group(function () {
+        Route::get('/$LOWER_NAME$', '$STUDLY_NAME$Controller@index');
+        // Route::namespace('Api')->group(module_path('$STUDLY_NAME$') . '/Routes/V1/Api/routers.php');
+    });
